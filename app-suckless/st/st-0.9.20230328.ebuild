@@ -2,7 +2,8 @@ EAPI=8
 
 DESCRIPTION="A simple virtual terminal emulator for X."
 HOMEPAGE="https://st.suckless.org"
-SRC_URI="https://github.com/ivanp7/st-ivanp7/archive/master.tar.gz"
+SRC_URI="https://github.com/ivanp7/st-ivanp7/archive/12d1e16.tar.gz"
+S="${WORKDIR}/st-ivanp7-12d1e1676b2407b578de0707ecb39f657828df34"
 
 LICENSE="MIT"
 SLOT="0"
