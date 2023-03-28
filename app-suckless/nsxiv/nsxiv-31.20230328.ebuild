@@ -1,9 +1,12 @@
 EAPI=8
 
+inherit desktop
+
 DESCRIPTION="Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer."
 HOMEPAGE="https://github.com/nsxiv/nsxiv"
-SRC_URI="https://github.com/nsxiv/nsxiv/archive/157646f.tar.gz"
-S="${WORKDIR}/nsxiv-157646f54cd010c8c884998319954006260f960e"
+SRC_URI="https://github.com/nsxiv/nsxiv/archive/master.tar.gz -> ${P}.tar.gz
+https://github.com/ivanp7/nsxiv-ivanp7/archive/master.tar.gz -> ${P}_patches.tar.gz"
+S="${WORKDIR}/nsxiv-master"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -19,24 +22,34 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 BDEPEND=""
 
-src_configure() {
-    if ! curl -fLo "config.h" "https://raw.githubusercontent.com/ivanp7/nsxiv-ivanp7/master/config.h" ||
-        ! curl -fLo "keycodes.patch" "https://raw.githubusercontent.com/ivanp7/nsxiv-ivanp7/master/keycodes.patch" ||
-        ! curl -fLo "etc/nsxiv.1" "https://raw.githubusercontent.com/ivanp7/nsxiv-ivanp7/master/nsxiv.1"
-    then
-        echo "Error: download failure"
-        die
-    fi
+src_prepare() {
+    cp -t . -- "$WORKDIR/nsxiv-ivanp7-master/config.h"
+    cp -t . -- "$WORKDIR/nsxiv-ivanp7-master/keycodes.patch"
+    cp -t etc -- "$WORKDIR/nsxiv-ivanp7-master/nsxiv.1"
 
-    patch < keycodes.patch
     sed -i '/^install: / s|: all|:|' Makefile
+
+    eapply keycodes.patch
+    eapply_user
+}
+
+src_configure() {
+    : # do nothing
 }
 
 src_compile() {
-    emake DESTDIR="${D}" OPT_DEP_DEFAULT=1
+    emake PREFIX=/usr DESTDIR="${D}" OPT_DEP_DEFAULT=1
 }
 
 src_install() {
-    emake DESTDIR="${D}" install-all
+    emake PREFIX=/usr DESTDIR="${D}" EGPREFIX=/usr/share/doc/${P}/examples install-all
+}
+
+pkg_postinst() {
+    xdg_desktop_database_update
+}
+
+pkg_postrm() {
+    xdg_desktop_database_update
 }
 

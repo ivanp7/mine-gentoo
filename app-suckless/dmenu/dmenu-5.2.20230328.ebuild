@@ -2,8 +2,8 @@ EAPI=8
 
 DESCRIPTION="A generic menu for X."
 HOMEPAGE="https://tools.suckless.org/dmenu"
-SRC_URI="https://github.com/ivanp7/dmenu-ivanp7/archive/7ae93cb.tar.gz"
-S="${WORKDIR}/dmenu-ivanp7-7ae93cb291709f578fefca7080124b102d1ada07"
+SRC_URI="https://github.com/ivanp7/dmenu-ivanp7/archive/master.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/dmenu-ivanp7-master"
 
 LICENSE="MIT"
 SLOT="0"
@@ -21,10 +21,10 @@ src_configure() {
 }
 
 src_compile() {
-    emake DESTDIR="${D}" X11INC=/usr/include/X11 X11LIB=/usr/lib64/X11
+    emake PREFIX=/usr DESTDIR="${D}" X11INC=/usr/include/X11 X11LIB=/usr/lib64/X11
 }
 
 src_install() {
-    emake DESTDIR="${D}" install
+    emake PREFIX=/usr DESTDIR="${D}" install
 }
 
