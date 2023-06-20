@@ -1,6 +1,6 @@
 EAPI=8
 
-inherit desktop
+inherit xdg-utils
 
 DESCRIPTION="Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer."
 HOMEPAGE="https://github.com/nsxiv/nsxiv"
